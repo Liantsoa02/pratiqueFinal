@@ -1,0 +1,10 @@
+{
+    "first_Name": "Zied",
+    "last_Name": "Zaier",
+    "date_birth": "1 January 1999",
+    "adresse": {
+        "streetnumber": 1001,
+        "streetname": "Sherbrooke",
+        "postalcode": "H3S1S1"
+    }
+}

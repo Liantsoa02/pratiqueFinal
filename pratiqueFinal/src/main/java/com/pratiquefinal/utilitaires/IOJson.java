@@ -5,58 +5,88 @@
  */
 package com.pratiquefinal.utilitaires;
 
+import com.pratiquefinal.modele.Resultat;
+import com.pratiquefinal.modele.Student;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import javax.naming.spi.DirStateFactory;
 import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 //import org.json.JSONObject;
 import net.sf.json.JSONObject;
 
-
 /**
  *
  * @author Rova
  */
 public class IOJson {
-    //lecture du fichier
-    public static void loadFileIntoString (String filePath, String fileEncoding) throws
-            FileNotFoundException, IOException {
-            String mainJSON = IOUtils.toString(new FileInputStream(filePath), fileEncoding);
 
-            JSONObject student = JSONObject.fromObject(mainJSON);
-            int id = student.getInt("student_id");
-            String fName = student.getString("first_name");
-            String lName = student.getString("last_name");
-            String dob = student.getString("date_birth");
-            boolean active = student.getBoolean("active");
-            double gpa = student.getDouble("GPA");
-            System.out.println(id+"-"+fName+"-"+lName+"-"+dob+"-"+active+"-"+gpa);
-            
-            JSONArray listeResultat = student.getJSONArray("results");
-            JSONObject singleCourse;
-            String title, cid;
-            double mark;
-            System.out.println("RESULTATS: ");
-            for(int i = 0; i < listeResultat.size(); i++){
-                singleCourse = listeResultat.getJSONObject(i);
-                cid=singleCourse.getString("course_id");
-                title = singleCourse.getString("course_title");
-                mark = singleCourse.getDouble("mark");
-                
-                System.out.println(cid+"-"+title+"-"+mark);
-            }
-            
-        
+    //lecture du fichier
+    private static String loadFileIntoString(String filePath, String fileEncoding) throws
+            FileNotFoundException, IOException {
+        String mainJSON = IOUtils.toString(new FileInputStream(filePath), fileEncoding);
+        return mainJSON;
     }
-    
+
+    public static Student parseStudent(String filePath, String fileEncoding) throws IOException {
+        String mainJSON = loadFileIntoString(filePath, fileEncoding);
+
+        //objet student class
+        Student stu = new Student();
+
+        JSONObject student = JSONObject.fromObject(mainJSON);
+        stu.setId(student.getInt("student_id"));
+        stu.setfName(student.getString("first_name"));
+        stu.setlName(student.getString("last_name"));
+        stu.setDob(student.getString("date_birth"));
+        stu.setActive(student.getBoolean("active"));
+        stu.setGpa(student.getDouble("GPA"));
+        //System.out.println(id+"-"+fName+"-"+lName+"-"+dob+"-"+active+"-"+gpa);
+
+        JSONArray listeResultat = student.getJSONArray("results");
+        JSONObject singleCourse;
+        Resultat result = new Resultat();
+        ArrayList<Resultat> resultats = new ArrayList<>();
+        System.out.println("RESULTATS: ");
+        for (int i = 0; i < listeResultat.size(); i++) {
+            result = new Resultat();
+            singleCourse = listeResultat.getJSONObject(i);
+            result.setCid(singleCourse.getString("course_id"));
+            result.setTitle(singleCourse.getString("course_title"));
+            result.setMark(singleCourse.getDouble("mark"));
+            resultats.add(result);
+            //System.out.println(cid+"-"+title+"-"+mark);
+        }
+        stu.setResultats(resultats);
+        System.out.println(stu.toString());
+        return stu;
+    }
+
     //ecriture de fichier
-    public static void saveStringIntoFile (String filePath, String contentToSave) throws 
-            FileNotFoundException, IOException{
-        File f = new File (filePath);
+    public static void saveStringIntoFile(String filePath, String contentToSave) throws
+            FileNotFoundException, IOException {
+        File f = new File(filePath);
         FileUtils.writeStringToFile(f, contentToSave, "UTF-8");
     }
-    
+
+    public static void saveStudent(Student s, String filePath) throws IOException {
+        
+        JSONObject st = new JSONObject();
+
+        st.accumulate("first_Name", s.getfName());
+        st.accumulate("last_Name", s.getlName());
+        st.accumulate("date_birth", s.getDob());
+        JSONObject address = new JSONObject();
+        address.accumulate("streetnumber", 1001);
+        address.accumulate("streetname", "Sherbrooke");
+        address.accumulate("postalcode", "H3S1S1");
+        st.accumulate("adresse", address);
+        
+        saveStringIntoFile(filePath, st.toString());
+    }
+
 }

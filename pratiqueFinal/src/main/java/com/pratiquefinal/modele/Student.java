@@ -5,6 +5,8 @@
  */
 package com.pratiquefinal.modele;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rova
@@ -16,6 +18,7 @@ public class Student {
     String dob;
     boolean active;
     double gpa;
+    ArrayList<Resultat> resultats = new ArrayList<>();
 
     public Student() {
     }
@@ -75,6 +78,24 @@ public class Student {
 
     public void setGpa(double gpa) {
         this.gpa = gpa;
+    }
+
+    public ArrayList<Resultat> getResultats() {
+        return resultats;
+    }
+
+    public void setResultats(ArrayList<Resultat> resultats) {
+        this.resultats = resultats;
+    }
+
+    @Override
+    public String toString() {
+        String res = "Student{" + "id=" + id + ", fName=" + fName + ", lName=" + lName + ", dob=" + dob + ", active=" + active + ", gpa=" + gpa +", resultats=";
+        for (int i = 0; i < resultats.size(); i++) {
+            res=res+resultats.get(i).toString()+",";
+        }
+        res=res+ '}';
+        return res;
     }
     
     
