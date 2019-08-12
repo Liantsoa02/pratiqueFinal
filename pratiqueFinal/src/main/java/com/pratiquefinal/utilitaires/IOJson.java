@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.naming.spi.DirStateFactory;
 import net.sf.json.JSONArray;
 import org.apache.commons.io.FileUtils;
@@ -89,4 +90,31 @@ public class IOJson {
         saveStringIntoFile(filePath, st.toString());
     }
 
+    public static void saveOther(String filePath) throws IOException {
+        
+        JSONObject obj = new JSONObject();
+        obj.accumulate("id", 12345);
+        obj.accumulate("first_Name", "Rova");
+        obj.accumulate("last_Name", "Liantsoa");
+        
+        Date date = new Date ();
+        long timestamp = date.getTime();
+        obj.accumulate("time_stamp", timestamp);
+        
+        JSONArray adresses = new JSONArray();
+        JSONObject address = new JSONObject();
+        address.accumulate("streetnumber", 1001);
+        address.accumulate("streetname", "Sherbrooke");
+        address.accumulate("postalcode", "H3S1S1");
+        adresses.add(address);
+        
+        address.clear();
+        address.accumulate("streetnumber", 3205);
+        address.accumulate("streetname", "Linton");
+        address.accumulate("postalcode", "H3S1S2");
+        adresses.add(address);
+        
+        obj.accumulate("adresse",adresses);
+        saveStringIntoFile(filePath, obj.toString());
+    }
 }

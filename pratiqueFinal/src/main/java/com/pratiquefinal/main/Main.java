@@ -20,9 +20,11 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         //IOJson lireficher = new IOJson();
-        Student s = IOJson.parseStudent("json/student.json", "UTF-8");
+        //Student s = IOJson.parseStudent("json/student.json", "UTF-8");
         String fichier_a_ecrire = "json/resultat.json";
-        IOJson.saveStudent(s, fichier_a_ecrire);
+        String fichier_a_ecrire2 = "json/resultat.json";
+        //IOJson.saveStudent(s, fichier_a_ecrire);
+        IOJson.saveOther(fichier_a_ecrire2);
     }
     
 }
